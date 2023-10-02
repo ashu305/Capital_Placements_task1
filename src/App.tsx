@@ -40,6 +40,7 @@ const App = () => {
       .then(() => {
         setPuttingRequest(false);
         console.log("Success");
+        alert("Success!");
       })
       .catch((err) => {
         console.log(err);
