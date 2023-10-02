@@ -56,7 +56,7 @@ const Wrapper = styled(Box)({
   flexDirection: "column",
   justifyContent: "space-between",
   alignItems: "center",
-  height: "100vh",
+  height: "100%",
   width: "4rem",
   backgroundColor: "#fff",
   zIndex: 10,

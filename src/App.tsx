@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Box, CircularProgress, styled } from "@mui/material";
+import { Box, Button, CircularProgress, styled } from "@mui/material";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import Form from "./components/Form";
@@ -11,6 +11,7 @@ const App = () => {
   const [selectedHeader, setSelectedHeader] = useState(2);
   const [data, setData] = useState<data | null>(null);
   const [loading, setLoading] = useState(false);
+  const [puttingRequest, setPuttingRequest] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -25,6 +26,26 @@ const App = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleSubmit = () => {
+    setPuttingRequest(true);
+    axios
+      .put(`http://127.0.0.1:4010/api/60.66394262220031/programs/quia/application-form`, {
+        data: {
+          id: "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+          type: "applicationForm",
+          attributes: data,
+        },
+      })
+      .then(() => {
+        setPuttingRequest(false);
+        console.log("Success");
+      })
+      .catch((err) => {
+        console.log(err);
+        setPuttingRequest(false);
+      });
+  };
 
   if (loading) {
     return (
@@ -43,12 +64,25 @@ const App = () => {
         <h1>Something Went Wrong.. Reload the Page</h1>
       </Box>
     );
+
   return (
     <Wrapper>
       <Sidebar />
       <BodyContainer>
         <Header selectedHeader={selectedHeader} setSelectedHeader={setSelectedHeader} />
-        <Form data={data} />
+        <Form data={data} setData={setData} />
+        <Button
+          variant="contained"
+          sx={{
+            margin: "auto",
+            width: "10rem",
+            height: "3rem",
+            fontSize: "1.2rem",
+          }}
+          onClick={handleSubmit}
+        >
+          {puttingRequest === false ? "Submit" : <CircularProgress />}
+        </Button>
       </BodyContainer>
     </Wrapper>
   );
@@ -74,18 +108,5 @@ const BodyContainer = styled(Box)({
   width: "100%",
   marginTop: "2rem",
   gap: "1rem",
-});
-
-const FormSection = styled(Box)({
-  display: "flex",
-  flexDirection: "column",
-  width: "99%",
-  height: "100%",
-  backgroundColor: "#fff",
-  marginTop: "0.4rem",
-  marginLeft: "0.4rem",
-  overflow: "scroll",
-  "::-webkit-scrollbar": {
-    display: "none",
-  },
+  marginBottom: "2rem",
 });
